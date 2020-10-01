@@ -1,3 +1,10 @@
+"""
+Title: Simple-Audio-Generator
+Desc: Generate 2-Second-Long Clips of Audio in Root Directory at a Given Frequency
+
+CODE BY LENS
+"""
+
 import numpy as np; from numpy import random as rand
 import scipy as sp; from scipy import signal as sig
 import wave
@@ -15,7 +22,7 @@ def main():
     print()
     print("Welcome to Lens' Audio Generator!!")
     print()
-    print("Version: v0.1.0.0")
+    print("Version: v0.1.0")
     print("Python: " + "v" + sys.version)
     print("Numpy: " + "v" + np.__version__)
     print()
