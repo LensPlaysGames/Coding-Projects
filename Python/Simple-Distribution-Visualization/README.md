@@ -6,7 +6,7 @@
 	- Laplace
 	- Rayleigh
 	
-Uses:
+## Uses:
 	- Numpy
 	- MatPlotLib
 	- Timeit
