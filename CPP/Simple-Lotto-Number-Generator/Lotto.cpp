@@ -68,7 +68,7 @@ vector<array<int, 5>> numbahz;
 
 void write_numbahz_to_file() {
     ofstream file;
-    file.open(("numbahz-yo.json"));
+    file.open(("numbahz-yo.json"), ios_base::app);
 
     json output;
     unordered_map<string, array<int, 5>> o;
