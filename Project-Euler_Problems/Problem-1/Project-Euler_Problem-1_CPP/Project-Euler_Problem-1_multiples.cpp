@@ -10,14 +10,14 @@ Project Euler Problem Desc: https://projecteuler.net/problem=1
 CODE BY LENS
 */
 
-#include <list>
+#include <vector>
 #include <iostream>
 
 using namespace std;
 
-list<int> multiples;
+vector<int> multiples;
 
-int find_sum_of_ints(list<int> l) {
+int find_sum_of_ints(vector<int> l) {
     int count = 0;
     for (auto i = l.begin(); i != l.end(); i++)
     {
@@ -26,7 +26,7 @@ int find_sum_of_ints(list<int> l) {
     return count;
 }
 
-void print_ints_in_list(list<int> l) {
+void print_ints_in_list(vector<int> l) {
     for (auto i = l.begin(); i != l.end(); i++)
     {
         cout << *i << "\n";
