@@ -16,6 +16,7 @@ CODE BY LENS
 using namespace std;
 
 vector<int> multiples;
+vector<int> multiples_of_three, multiples_of_five;
 
 int find_sum_of_ints(vector<int> l) {
     int count = 0;
@@ -36,14 +37,25 @@ void print_ints_in_list(vector<int> l) {
 int main() {
     for (int i = 0; i < 1000; i++)
     {
-        if (i % 3 == 0 || i % 5 == 0) {
+        if (i % 3 == 0) {
             multiples.push_back(i);
+            multiples_of_three.push_back(i);
+        }
+        else if (i % 5 == 0) {
+            multiples.push_back(i);
+            multiples_of_five.push_back(i);
         }
     }
     print_ints_in_list(multiples);
 
     int sum = find_sum_of_ints(multiples);
+    int three_sum = find_sum_of_ints(multiples_of_three);
+    int five_sum = find_sum_of_ints(multiples_of_five);
+
+    cout << "\nSum of All Multiples of 3 is " << three_sum << "\n";
+    cout << "Sum of All Multiples of 5 is " << five_sum << "\n";
     cout << "\nSum of All Multiples of 3 and 5 is " << sum << "\n";
 
+    cin.get();
     return 0;
 }
