@@ -8,13 +8,18 @@ from PyQt5.QtPrintSupport import *
 
 
  # GLOBALS
-window_title = "Lens Sipsum"
-x_offset = 80           # Distance From Left Edge of Monitor
-y_offset = 80           # Distance From Top Edge of Monitor
-width = 720             # Window Width in Pixels
-height = 480            # Window Height in Pixels
-editor_font_size = 14   # Size of Font inside Editor
+x_offset = 80                       # Distance From Left Edge of Monitor
+y_offset = 80                       # Distance From Top Edge of Monitor
+width = 720                         # Window Width in Pixels
+height = 480                        # Window Height in Pixels
+editor_font_size = 12               # Default Size of Font inside Editor
+window_title = "Focused Thought"
 
+options_x = 240
+options_y = 160
+options_x_offset = 240
+options_y_offset = 240
+options_title = "Options"
 
  # MAIN WINDOW
 class Lens_PyQt5_Window(QMainWindow):
@@ -32,7 +37,7 @@ class Lens_PyQt5_Window(QMainWindow):
         layout.addWidget(self.editor)                                                       # Add Text Editor to Layout
 
         container = QWidget()                                                               # Create Container for All GUI to sit inside
-        container.setLayout(layout)                                                         # Set Layout to One Created Above                                          
+        container.setLayout(layout)                                                         # Set Layout to One Created Above
         self.setCentralWidget(container)                                                    # Sets the "Central Widget" (Main Focus) of the Window to our GUI Container
 
         fixed_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)                      # Get Font based on OS
@@ -41,7 +46,9 @@ class Lens_PyQt5_Window(QMainWindow):
 
         self.path = None                                                                    # Initialize Save Path to None
 
-
+        self.init_main_ui()                                                                 # Initialize Main Window UI
+        
+    def init_main_ui(self):                                                                 # Initialize Menu Bar in Main Window
          # FILE DROPDOWN
         file_dropdown = self.menuBar().addMenu("&File")                                     # Create Dropdown Menu & Add it to GUI
 
@@ -109,9 +116,18 @@ class Lens_PyQt5_Window(QMainWindow):
         self.update_title()                                                                 # Update Title with Name of Current Open File
         self.show()                                                                         # Show the Window (monstrosity) we have just created!
 
+         # OPTIONS DROPDOWN
+        options_dropdown = self.menuBar().addMenu("&Options")
+        
+        action_open_options = QAction("Options", self)
+        action_open_options.setShortcut("Ctrl+P")
+        action_open_options.setStatusTip("Open Another Window to Configure Appearance and Function of the Program")
+        action_open_options.triggered.connect(self.open_options)
+
+        options_dropdown.addAction(action_open_options)
 
      # HELPER FUNCTIONS
-    def important_message(self, msg):                   # Alerts End User
+    def important_message(self, msg):                   # Alerts End User with a Pop-Up Message Box
         msg_box = QMessageBox(self)
         msg_box.setWindowTitle("Important Message!")
         msg_box.setText(msg)
@@ -120,6 +136,47 @@ class Lens_PyQt5_Window(QMainWindow):
     def update_title(self):                             # Updates Title to Reflect the Name of the Currently Open File
         self.setWindowTitle("Focused Thought -- " + (os.path.basename(self.path) if self.path else "no_name"))
 
+    def change_editor_font_size(self, size):            # Set Font Size that the Editor Displays Plain Text with
+        global editor_font_size
+        editor_font_size = size
+        self.editor.setFontPointSize(editor_font_size)
+         # Saves Current Text to txt, Clears Current Text, then Inserts Current Text once again to update all font values in editor
+        txt = self.editor.toPlainText()
+        self.editor.clear()
+        self.editor.setText(txt)
+
+    def open_options(self):                             # Opens Options Menu Window
+         # OPTIONS WINDOW CONFIG
+        options_win = QDialog(self)
+        options_win.setGeometry(options_x_offset, options_y_offset, options_x, options_y)
+        options_win.setWindowTitle(options_title)
+        layout = QVBoxLayout()
+        options_win.setLayout(layout)
+
+        # CONTENTS
+             # FONT OPTIONS
+        options_win.font_box = QGroupBox("Font Options")
+        options_win.font_lbl = QLabel("Font")
+        options_win.font_combox = QComboBox()
+        options_win.font_combox.addItem("Default")
+        options_win.font_size_lbl = QLabel("Font Size")
+        options_win.font_size = QSpinBox()
+        options_win.font_size.setValue(editor_font_size)
+        options_win.font_size.setMinimum(8)
+        options_win.font_size.setMaximum(72)
+                # FONT OPTIONS LAYOUT
+        options_win.font_layout = QGridLayout()
+        options_win.font_layout.addWidget(options_win.font_lbl, 0, 0)
+        options_win.font_layout.addWidget(options_win.font_combox, 0, 1)
+        options_win.font_layout.addWidget(options_win.font_size_lbl, 1, 0)
+        options_win.font_layout.addWidget(options_win.font_size, 1, 1)
+        options_win.font_box.setLayout(options_win.font_layout)
+        layout.addWidget(options_win.font_box)
+                # FONT OPTIONS "EVENT SUBSCRIBES"
+        options_win.font_size.valueChanged.connect(self.change_editor_font_size)
+
+        options_win.show()                              # Display Options GUI to End User
+        options_win.exec_()                             # Wait for End User to Close Options
 
      # FILE OPERATIONS
     def save_file(self):                                # Sets Save Path (chosen by End User) if it isn't set already, otherwise Saves Text in Editor to already-set path
@@ -165,6 +222,7 @@ class Lens_PyQt5_Window(QMainWindow):
 if __name__ == '__main__':
      # SETUP
     app = QApplication([])
+    app.setStyle('QtCurve')
     win = Lens_PyQt5_Window()                   # Create GUI Window
     sys.exit(app.exec_())                       # Safely Exit the Application once User has closed GUI
     
