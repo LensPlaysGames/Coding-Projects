@@ -1,3 +1,6 @@
+# Windows Shortcut
+*.lnk
+
 # Visual Studio Crap
 .vs/
 *.suo
