@@ -11,34 +11,39 @@ import qtmodern.windows
 
 
  # GLOBALS
-x_offset = 80           # Distance From Left of Monitor
-y_offset = 80           # Distance From Top of Monitor
+window_title = "Lens Sipsum"
+x_offset = 80           # Distance From Left Edge of Monitor
+y_offset = 80           # Distance From Top Edge of Monitor
 width = 720             # Window Width in Pixels
 height = 480            # Window Height in Pixels
+editor_font_size = 14   # Size of Font inside Editor
+
 
  # MAIN WINDOW
 class Lens_PyQt5_Window(QMainWindow):
     def __init__(self):                                     # Constructor
-        super(Lens_PyQt5_Window, self).__init__()                   # Makes sure the init gets called (not recursive somehow)
+        super().__init__()                                                                  # Calls __init__ inside QMainWindow class that is inherited from
 
-        self.setGeometry(x_offset, y_offset, width, height)         # x and y offset are distance in pixels from top left of screen, width and height dictate how big to make the window itself
-        self.setWindowTitle('Lens Sipsum')                          # Sets Title of Main Window
+         # MAIN WINDOW CONFIG
+        self.setGeometry(x_offset, y_offset, width, height)                                 # x and y offset are distance in pixels from top left of screen, width and height dictate how big to make the window itself
+        self.setWindowTitle(window_title)                                                   # Sets Title of Main Window
         
          # EDITOR AND LAYOUT
-        layout = QVBoxLayout()
-        self.editor = QTextEdit()
-        self.editor.setAcceptRichText(False)
-        layout.addWidget(self.editor)
+        layout = QVBoxLayout()                                                              # Aligns Elements Vertically
+        self.editor = QTextEdit()                                                           # Create Text Editor Widget
+        self.editor.setAcceptRichText(False)                                                # We Broke 🤷‍
+        layout.addWidget(self.editor)                                                       # Add Text Editor to Layout
 
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
+        container = QWidget()                                                               # Create Container for All GUI to sit inside
+        container.setLayout(layout)                                                         # Set Layout to One Created Above                                          
+        self.setCentralWidget(container)                                                    # Sets the "Central Widget" (Main Focus) of the Window to our GUI Container
 
-        fixed_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)
-        fixed_font.setPointSize(14)
-        self.editor.setFont(fixed_font)
+        fixed_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)                      # Get Font based on OS
+        fixed_font.setPointSize(editor_font_size)                                           # Set Editor Font Size
+        self.editor.setFont(fixed_font)                                                     # Set Editor Font
 
-        self.path = None
+        self.path = None                                                                    # Initialize Save Path to None
+
 
          # FILE DROPDOWN
         file_dropdown = self.menuBar().addMenu("&File")                                     # Create Dropdown Menu & Add it to GUI
@@ -93,7 +98,7 @@ class Lens_PyQt5_Window(QMainWindow):
         action_undo.triggered.connect(self.editor.undo)                                     # Connect Button to It's Corresponding Function
 
         action_redo = QAction("Redo", self)                                                 # Create Action to Cut Text
-        action_undo.setShortcut("Ctrl+Shift+Z")                                             # Set Keyboard Shortcut
+        action_redo.setShortcut("Ctrl+Shift+Z")                                             # Set Keyboard Shortcut
         action_redo.setStatusTip("Replace the Last Section of Text Removed with Undo")      # Set Helpful Tip on Hove
         action_redo.triggered.connect(self.editor.redo)                                     # Connect Button to It's Corresponding Function
 
@@ -104,9 +109,9 @@ class Lens_PyQt5_Window(QMainWindow):
         edit_dropdown.addAction(action_undo)                                                # Add Action into Dropdown
         edit_dropdown.addAction(action_redo)                                                # Add Action into Dropdown
         
-    
         self.update_title()                                                                 # Update Title with Name of Current Open File
         self.show()                                                                         # Show the Window (monstrosity) we have just created!
+
 
      # HELPER FUNCTIONS
     def important_message(self, msg):                   # Alerts End User
@@ -117,6 +122,7 @@ class Lens_PyQt5_Window(QMainWindow):
 
     def update_title(self):                             # Updates Title to Reflect the Name of the Currently Open File
         self.setWindowTitle("Focused Thought -- " + (os.path.basename(self.path) if self.path else "no_name"))
+
 
      # FILE OPERATIONS
     def save_file(self):                                # Sets Save Path (chosen by End User) if it isn't set already, otherwise Saves Text in Editor to already-set path
@@ -134,36 +140,35 @@ class Lens_PyQt5_Window(QMainWindow):
         self.save_at_path(path)
 
     def save_at_path(self, path):                       # Saves Text in Editor to File at Path
-        txt = self.editor.toPlainText()
+        txt = self.editor.toPlainText()                         # Get Text to Save
         try:
             with open(path, 'w') as f:
-                f.write(txt)
+                f.write(txt)                                    # Try Write Text to File
         except Exception as e:
-            self.important_message(str(e))
+            self.important_message(str(e))                      # Alert End User if anything goes wrong
         else:
-            self.path = path
-            self.update_title()
+            self.path = path                                    # Set Save Path for future saves
+            self.update_title()                                 # Update Window Title to Reflect File Name
 
     def open_file(self):                                # Fills Editor Text from File chosen by End User
         path, _ = QFileDialog.getOpenFileName(self, "Open File", "", "Text (*.txt);;All Files (*.*)")
         if path:
             try:
                 with open(path, 'r') as f:
-                    read = f.read()
+                    read = f.read()                             # Get Contents from File at User-Chosen Path
             except Exception as e:
-                self.important_message(str(e))
+                self.important_message(str(e))                  # Alert End User if anything goes wrong
             else:
-                self.path = path
-                self.editor.setPlainText(read)
-                self.update_title()
+                self.path = path                                # Set Save Path for future saves
+                self.editor.setPlainText(read)                  # Fill Editor Text with Contents of File
+                self.update_title()                             # Update Window Title to Reflect File Name
 
 
  # APPLICATION
 if __name__ == '__main__':
      # SETUP
     app = QApplication([])
-    qtmodern.styles.dark(app)       # Thank you to https://github.com/gmarull/qtmodern for this glorious QtStyle :D
-
-    win = Lens_PyQt5_Window()
-    sys.exit(app.exec_())
+    qtmodern.styles.dark(app)                   # Thank you to https://github.com/gmarull/qtmodern for this glorious QtStyle :D
+    win = Lens_PyQt5_Window()                   # Create GUI Window
+    sys.exit(app.exec_())                       # Safely Exit the Application once User has closed GUI
     
