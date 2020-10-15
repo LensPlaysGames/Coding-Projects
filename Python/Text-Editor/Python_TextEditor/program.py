@@ -6,9 +6,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtPrintSupport import *
 
-import qtmodern.styles
-import qtmodern.windows
-
 
  # GLOBALS
 window_title = "Lens Sipsum"
@@ -168,7 +165,6 @@ class Lens_PyQt5_Window(QMainWindow):
 if __name__ == '__main__':
      # SETUP
     app = QApplication([])
-    qtmodern.styles.dark(app)                   # Thank you to https://github.com/gmarull/qtmodern for this glorious QtStyle :D
     win = Lens_PyQt5_Window()                   # Create GUI Window
     sys.exit(app.exec_())                       # Safely Exit the Application once User has closed GUI
     
