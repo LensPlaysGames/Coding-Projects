@@ -1,4 +1,3 @@
-
 Skip to content
 Pull requests
 Issues
@@ -92,6 +91,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+#PyCharm
+*.xml
+*.iml
 
 # Translations
 *.mo
