@@ -7,8 +7,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
  # GLOBALS
-main_win_x = 333             # Width of Main Window
-main_win_y = 111             # Height of Main Window
+main_win_x = 333                # Width of Main Window
+main_win_y = 111                # Height of Main Window
 main_win_x_offset = 90          # Distance from Left Edge of Screen to Left Edge of Main Window
 main_win_y_offset = 90          # Distance from Top Edge of Screen to Top Edge of Main Window
 main_win_title = "SSN"
@@ -54,10 +54,11 @@ class MainWin(QMainWindow):
     def get_ssn(self):
         # Valid SSN Format:
         # Area[001-665, 667-899] - Group[01-99] - Serial[0001-9999]
-            # Generate Numbers                      # Pad with Zeros if Needed
-        area = str(rng.randint(1, 899));        area.zfill(3)
-        group = str(rng.randint(1, 99));        group.zfill(2)
-        serial = str(rng.randint(1, 9999));     serial.zfill(4)
+
+        # Generate Numbers                      # Pad with Zeros if Needed
+        area = str(rng.randint(1, 899));        area = area.zfill(3)
+        group = str(rng.randint(1, 99));        group = group.zfill(2)
+        serial = str(rng.randint(1, 9999));     serial = serial.zfill(4)
 
         ssn = area + "-" + group + "-" + serial
         return ssn
