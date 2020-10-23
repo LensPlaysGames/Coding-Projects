@@ -8,26 +8,27 @@ from PyQt5.QtPrintSupport import *
 
 
  # GLOBALS
-x_offset = 80                       # Distance From Left Edge of Monitor
-y_offset = 80                       # Distance From Top Edge of Monitor
-width = 720                         # Window Width in Pixels
-height = 480                        # Window Height in Pixels
 editor_font_size = 12               # Default Size of Font inside Editor
-window_title = "Focused Thought"
 
-options_x = 240
-options_y = 160
-options_x_offset = 240
-options_y_offset = 240
-options_title = "Options"
+editor_x = 720                      # Editor Window Width in Pixels
+editor_y = 480                      # Editor Window Height in Pixels
+x_offset = 80                       # Editor Window Distance From Left Edge of Monitor
+y_offset = 80                       # Editor Window Distance From Top Edge of Monitor
+window_title = "Focused Thoughts"   # Title of the Editor Window
+
+options_x = 240                     # Options Window Width in Pixels 
+options_y = 160                     # Options Window Height in Pixels
+options_x_offset = 240              # Options Window Distance from Left Edge of Monitor
+options_y_offset = 240              # Options Window Distance from Top Edge of Monitor
+options_title = "Options"           # Title of the Options Window
 
  # MAIN WINDOW
-class Lens_PyQt5_Window(QMainWindow):
+class EditorWindow(QMainWindow):
     def __init__(self):                                     # Constructor
         super().__init__()                                                                  # Calls __init__ inside QMainWindow class that is inherited from
 
          # MAIN WINDOW CONFIG
-        self.setGeometry(x_offset, y_offset, width, height)                                 # x and y offset are distance in pixels from top left of screen, width and height dictate how big to make the window itself
+        self.setGeometry(x_offset, y_offset, editor_x, editor_y)                            # x and y offset are distance in pixels from top left of screen, width and height dictate how big to make the window itself
         self.setWindowTitle(window_title)                                                   # Sets Title of Main Window
         
          # EDITOR AND LAYOUT
@@ -40,9 +41,9 @@ class Lens_PyQt5_Window(QMainWindow):
         container.setLayout(layout)                                                         # Set Layout to One Created Above
         self.setCentralWidget(container)                                                    # Sets the "Central Widget" (Main Focus) of the Window to our GUI Container
 
-        fixed_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)                      # Get Font based on OS
-        fixed_font.setPointSize(editor_font_size)                                           # Set Editor Font Size
-        self.editor.setFont(fixed_font)                                                     # Set Editor Font
+        self.fixed_font = QFontDatabase.systemFont(QFontDatabase.FixedFont)                 # Get Font based on OS
+        self.fixed_font.setPointSize(editor_font_size)                                      # Set Editor Font Size
+        self.editor.setFont(self.fixed_font)                                                # Set Editor Font
 
         self.path = None                                                                    # Initialize Save Path to None
 
@@ -172,7 +173,7 @@ class Lens_PyQt5_Window(QMainWindow):
         options_win.font_layout.addWidget(options_win.font_size, 1, 1)
         options_win.font_box.setLayout(options_win.font_layout)
         layout.addWidget(options_win.font_box)
-                # FONT OPTIONS "EVENT SUBSCRIBES"
+                # FONT OPTIONS EVENT SUBSCRIBES
         options_win.font_size.valueChanged.connect(self.change_editor_font_size)
 
         options_win.show()                              # Display Options GUI to End User
@@ -223,6 +224,6 @@ if __name__ == '__main__':
      # SETUP
     app = QApplication([])
     app.setStyle('QtCurve')
-    win = Lens_PyQt5_Window()                   # Create GUI Window
+    win = EditorWindow()                   # Create GUI Window
     sys.exit(app.exec_())                       # Safely Exit the Application once User has closed GUI
     
