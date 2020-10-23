@@ -22,6 +22,7 @@ options_x_offset = 240              # Options Window Distance from Left Edge of 
 options_y_offset = 240              # Options Window Distance from Top Edge of Monitor
 options_title = "Options"           # Title of the Options Window
 
+
  # MAIN WINDOW
 class EditorWindow(QMainWindow):
     def __init__(self):                                     # Constructor
