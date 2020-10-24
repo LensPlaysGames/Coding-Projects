@@ -4,4 +4,12 @@ I wrote script this as a way to help myself understand the time that can be save
 
 Uses concurrent.futures and it's wonderful ThreadPoolExecutor to manage threads
 
+
+
 Thanks to Corey Schafer for the [image urls](https://github.com/CoreyMSchafer/code_snippets/blob/master/Python/Threading/download-images.py) and great [tutorial on YouTube](https://www.youtube.com/watch?v=IEEhzQoKtQU)
+
+![Average Download Speed Graph](https://github.com/LensPlaysGames/Coding-Projects/blob/master/Python/Threads-Real-World/avg-graph.png)
+
+
+
+![Download Speed Graph](https://github.com/LensPlaysGames/Coding-Projects/blob/master/Python/Threads-Real-World/all-graph.png)
