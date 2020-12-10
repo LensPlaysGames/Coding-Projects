@@ -37,6 +37,8 @@ class MainWindow(QMainWindow):
 
 
     def init_values(self):
+        self.v_reset()
+
         self.last_v_rms = 0
         self.last_v_p2p = 0 
         self.last_v_peak = 0 
@@ -46,65 +48,71 @@ class MainWindow(QMainWindow):
     def init_main_UI(self):
         self.row1 = QHBoxLayout()
         self.row2 = QHBoxLayout()
-        self.row3 = QHBoxLayout()
-        self.row4 = QHBoxLayout()
+        self.col1 = QVBoxLayout()
+        self.col2 = QVBoxLayout()
 
         self.lbl_rms = QLabel('RMS Voltage')
-        self.row1.addWidget(self.lbl_rms)
+        self.col1.addWidget(self.lbl_rms)
 
         self.rms_voltage = QLineEdit()
         self.rms_voltage.setText('')
         # self.rms_voltage.setAlignment(Qt.AlignRight)
         self.rms_voltage.setValidator(self.validator)
-        self.row1.addWidget(self.rms_voltage)
+        self.col2.addWidget(self.rms_voltage)
 
 
         self.lbl_p2p = QLabel('Peak-to-Peak Voltage')
-        self.row2.addWidget(self.lbl_p2p)
+        self.col1.addWidget(self.lbl_p2p)
 
         self.p2p_voltage = QLineEdit()
         self.p2p_voltage.setText('')
         # self.p2p_voltage.setAlignment(Qt.AlignRight)
         self.p2p_voltage.setValidator(self.validator)
-        self.row2.addWidget(self.p2p_voltage)
+        self.col2.addWidget(self.p2p_voltage)
 
 
         self.lbl_peak = QLabel('Peak Voltage')
-        self.row3.addWidget(self.lbl_peak)
+        self.col1.addWidget(self.lbl_peak)
 
         self.peak_voltage = QLineEdit()
         self.peak_voltage.setText('')
         # self.peak_voltage.setAlignment(Qt.AlignRight)
         self.peak_voltage.setValidator(self.validator)
-        self.row3.addWidget(self.peak_voltage)
+        self.col2.addWidget(self.peak_voltage)
 
 
         self.lbl_avg = QLabel('Average Voltage')
-        self.row4.addWidget(self.lbl_avg)
+        self.col1.addWidget(self.lbl_avg)
 
         self.avg_voltage = QLineEdit()
         self.avg_voltage.setText('')
         # self.avg_voltage.setAlignment(Qt.AlignRight)
         self.avg_voltage.setValidator(self.validator)
-        self.row4.addWidget(self.avg_voltage)
+        self.col2.addWidget(self.avg_voltage)
 
-        self.myLayout.addLayout(self.row1)
-        self.myLayout.addLayout(self.row2)
-        self.myLayout.addLayout(self.row3)
-        self.myLayout.addLayout(self.row4)
+
+        self.row1.addLayout(self.col1)
+        self.row1.addLayout(self.col2)
+
 
         self.calc_btn = QPushButton('Calculate')
         self.calc_btn.clicked.connect(self.get_inputs)
-        self.myLayout.addWidget(self.calc_btn)
+        self.row2.addWidget(self.calc_btn)
+
+        self.myLayout.addLayout(self.row1)
+        self.myLayout.addLayout(self.row2)
 
         self.show()
 
 
-    def get_inputs(self):
+    def v_reset(self):
         self.v_rms = 0
         self.v_p2p = 0 
         self.v_peak = 0 
         self.v_avg = 0
+
+    def get_inputs(self):
+        self.v_reset()
 
         try:
             self.v_rms = float(self.rms_voltage.text())
