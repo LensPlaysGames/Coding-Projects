@@ -4,6 +4,9 @@ A program that keeps squaring two, then does that some more. See how high you ca
 A program made by Lens of Lensor Radii
 '''
 
+from time import perf_counter as ct
+
+
 def main():
     print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     print()
@@ -18,7 +21,6 @@ def main():
     print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
 
     starting_number = get_start_num()
-    input()
     run_loop(starting_number)
 
 
@@ -53,6 +55,7 @@ def run_loop(start_num):
     print('STARTING NUMBER: ' + str(start_num))
 
     exponent = 0    
+    start_timer = ct()
 
     while(True):
         try:
@@ -64,12 +67,16 @@ def run_loop(start_num):
             print()    
 
             exponent += 1
-        except Error as e:
+
+        except:
+            end_timer = ct()
             print()
             print('ERROR IN CALCULATIONS!')
-            print(e)
             print()
-        
+            print('Calculation Time: ' + str(end_timer - start_timer) + 's')
+            print(str(1000*(end_timer - start_timer))+'ms')
+            input()
+            main()
 
 
 if __name__ == '__main__':
