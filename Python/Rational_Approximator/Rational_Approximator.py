@@ -7,7 +7,7 @@
 import math
 
 # IMPORTANT GLOBAL PROGRAM SETTINGS
-print_in_loop = False                       # Whether or not to print comments as it calculates each iteration (MAJOR SLOW-DOWN)                False is faster.
+print_in_loop = True                        # Whether or not to print comments as it calculates each iteration (MAJOR SLOW-DOWN)                False is faster.
 num_of_iterations = 100000                  # How far down the rabbit-hole?                                                                     A million gets quite slow...
 max_denom = float('inf')                    # Max allowed denominator.                                                                          Put  float('inf')  for no effect.
 reasonable_error = 0                        # If the approximation is this far away from the real value, halt program (but don't catch fire).   Set to 0 (ZERO) for no effect.
@@ -69,7 +69,7 @@ def run_farey(origin):
         next_farey_diff_perc = 0
 
         for i in range(num_of_iterations):
-
+            i_save = i
             next_farey_num = farey1_num + farey2_num
             next_farey_denom = farey1_denom + farey2_denom
             if next_farey_denom > max_denom:
@@ -139,6 +139,8 @@ def run_farey(origin):
         print('Decimal Error: ', f'{next_farey_diff:.18f}')
         print('Scientific Notation Error: ', next_farey_diff)
         print('Percentage Error: ', f'{next_farey_diff_perc:.18f}', '%')
+        print()
+        print('Iterations Used: ', i_save)
         print()
         for i in range(12):
             print()
