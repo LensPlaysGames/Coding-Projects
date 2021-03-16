@@ -9,6 +9,7 @@
 
 # I'm HAPPY with how this has turned out
 # I would like to add a 'lock' of sorts to the moles value, so I could change the other two and see the different values for the same amount of moles.
+# A drop-down with pre-defined molar masses could be good as well
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
