@@ -83,25 +83,29 @@ def saveRecipesJSON():
 
 def LoadRecipesFromJSON():
     # FROM JSON, LOAD LIST OF 'RECIPES', which is really just a tuple with a string (name) and a dictionary (ingredients).
-    with open(saveFile, 'r') as f:
-        recipeTuples = json.load(f)
+    try:
+        with open(saveFile, 'r') as f:
+            recipeTuples = json.load(f)
 
-    for recipeTuple in recipeTuples:
-        # Seperate the tuple for each recipe into a string and a dictionary.
-        name, ingredients = recipeTuple
-        # Use the deserialized recipe information to create a new recipe, and add it to the list.
-        recipe = Recipe()
-        recipe.setName(name)
-        for key, value in ingredients.items():
-            recipe.addIngredient(key, value)
-        recipes.append(recipe)
-    print("LOADED RECIPES FROM JSON SUCCESSFULLY")
+        for recipeTuple in recipeTuples:
+            # Seperate the tuple for each recipe into a string and a dictionary.
+            name, ingredients = recipeTuple
+            # Use the deserialized recipe information to create a new recipe, and add it to the list.
+            recipe = Recipe()
+            recipe.setName(name)
+            for key, value in ingredients.items():
+                recipe.addIngredient(key, value)
+            recipes.append(recipe)
+        print("LOADED RECIPES FROM JSON SUCCESSFULLY")
+    except:
+        print("COULD NOT FIND " + saveFile)
+        return
 
 class RecipeWindow(qtw.QWidget):
     def __init__(self, recipeName):
         super().__init__()
 
-        self.setWindowTitle(recipeName + " Ingredients") 
+        self.setWindowTitle(recipeName + " Ingredients")
         self.setLayout(qtw.QVBoxLayout())
 
         self.makeUI(recipeName) # LOAD UI LAYOUT & DATA
@@ -124,7 +128,7 @@ class RecipeWindow(qtw.QWidget):
         ingredientsTable.setColumnCount(2)
         ingredientsTable.setHorizontalHeaderItem(0, qtw.QTableWidgetItem("Ingredient"))
         ingredientsTable.setHorizontalHeaderItem(1, qtw.QTableWidgetItem("Amount"))
-        
+
         i = 0
         for key, value in self.currentRecipe.getIngredients().items():
             ingredientsTable.setItem(i, 0, qtw.QTableWidgetItem(str(key)))
@@ -153,7 +157,7 @@ class addWindow(qtw.QWidget):
 
         self.setWindowTitle("Add a Recipe")
 
-        self.setLayout(qtw.QVBoxLayout())   
+        self.setLayout(qtw.QVBoxLayout())
 
         self.ingredientsCount = 0
         self.ingredientsNames = []
@@ -166,7 +170,7 @@ class addWindow(qtw.QWidget):
     def makeUI(self):
         container = qtw.QWidget()
         container.setLayout(qtw.QVBoxLayout())
-        
+
         nameContainer = qtw.QWidget()
         nameContainer.setLayout(qtw.QHBoxLayout())
         nameLabel = qtw.QLabel("Name: ")
@@ -225,6 +229,8 @@ class addWindow(qtw.QWidget):
     def saveRecipeButtonFunc(self):
         newRecipe = Recipe()
 
+        newRecipe.setName(self.nameLE.text())
+
         for ingredientName, ingredientAmount in zip(self.ingredientsNames, self.ingredientsAmounts):
             newRecipe.addIngredient(ingredientName.text(), ingredientAmount.text())
 
@@ -237,7 +243,7 @@ class addWindow(qtw.QWidget):
 
         self.close()
         restart()
-        
+
 
 class MainWindow(qtw.QWidget):
     def __init__(self):
@@ -286,7 +292,7 @@ class MainWindow(qtw.QWidget):
 def restart():
     qtc.QCoreApplication.quit()
     status = qtc.QProcess.startDetached(sys.executable, sys.argv)
-
+    print(status)
 
 def main():
     # INITIALIZE DATA
