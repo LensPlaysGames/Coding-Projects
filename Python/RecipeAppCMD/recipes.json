@@ -1,0 +1,27 @@
+[
+  [
+    "Black Powder",
+    {
+      "KNO3": 75,
+      "Charcoal": 15,
+      "Sulfur": 10
+    }
+  ],
+  [
+    "Miller - Bangor (16.5%)",
+    {
+      "KNO3": 67,
+      "Al (pyro)": 16.5,
+      "Sulfur": 16.5
+    }
+  ],
+  [
+    "Composition 604",
+    {
+      "KNO3": 54,
+      "Al (pyro)": 40,
+      "Sulfur": 5,
+      "Boric Acid": 1
+    }
+  ]
+]
