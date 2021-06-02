@@ -38,6 +38,10 @@
 
 # I've sort of fixed the not updating thing, it just restarts instead of doing anything fancy.
 
+# Added delete confirmation when deleting a recipe. Also added close button to recipe window. Fixed not saving new recipe name. Total time programming up to this point: ~5 hours.
+
+# Fixed being able to click into and edit cells of the table while in recipe window.
+
 # A comment/notes section for each recipe would be cool.
 
 import sys
@@ -83,29 +87,25 @@ def saveRecipesJSON():
 
 def LoadRecipesFromJSON():
     # FROM JSON, LOAD LIST OF 'RECIPES', which is really just a tuple with a string (name) and a dictionary (ingredients).
-    try:
-        with open(saveFile, 'r') as f:
-            recipeTuples = json.load(f)
+    with open(saveFile, 'r') as f:
+        recipeTuples = json.load(f)
 
-        for recipeTuple in recipeTuples:
-            # Seperate the tuple for each recipe into a string and a dictionary.
-            name, ingredients = recipeTuple
-            # Use the deserialized recipe information to create a new recipe, and add it to the list.
-            recipe = Recipe()
-            recipe.setName(name)
-            for key, value in ingredients.items():
-                recipe.addIngredient(key, value)
-            recipes.append(recipe)
-        print("LOADED RECIPES FROM JSON SUCCESSFULLY")
-    except:
-        print("COULD NOT FIND " + saveFile)
-        return
+    for recipeTuple in recipeTuples:
+        # Seperate the tuple for each recipe into a string and a dictionary.
+        name, ingredients = recipeTuple
+        # Use the deserialized recipe information to create a new recipe, and add it to the list.
+        recipe = Recipe()
+        recipe.setName(name)
+        for key, value in ingredients.items():
+            recipe.addIngredient(key, value)
+        recipes.append(recipe)
+    print("LOADED RECIPES FROM JSON SUCCESSFULLY")
 
 class RecipeWindow(qtw.QWidget):
     def __init__(self, recipeName):
         super().__init__()
 
-        self.setWindowTitle(recipeName + " Ingredients")
+        self.setWindowTitle(recipeName + " Ingredients") 
         self.setLayout(qtw.QVBoxLayout())
 
         self.makeUI(recipeName) # LOAD UI LAYOUT & DATA
@@ -118,6 +118,10 @@ class RecipeWindow(qtw.QWidget):
         self.layout().addWidget(deleteButton)
         deleteButton.clicked.connect(self.deleteButtonFunc)
 
+        closeButton = qtw.QPushButton("Close")
+        self.layout().addWidget(closeButton)
+        closeButton.clicked.connect(self.close)
+
     def automaticIngredientsTable(self, recipeName):
         for item in recipes:
             if item.getName() == recipeName:
@@ -128,7 +132,8 @@ class RecipeWindow(qtw.QWidget):
         ingredientsTable.setColumnCount(2)
         ingredientsTable.setHorizontalHeaderItem(0, qtw.QTableWidgetItem("Ingredient"))
         ingredientsTable.setHorizontalHeaderItem(1, qtw.QTableWidgetItem("Amount"))
-
+        ingredientsTable.setEditTriggers(qtw.QAbstractItemView.NoEditTriggers)
+        
         i = 0
         for key, value in self.currentRecipe.getIngredients().items():
             ingredientsTable.setItem(i, 0, qtw.QTableWidgetItem(str(key)))
@@ -138,13 +143,16 @@ class RecipeWindow(qtw.QWidget):
         self.layout().addWidget(ingredientsTable)
 
     def deleteButtonFunc(self):
-        # NEED TO ADD SOME DIALOG BOX 'OK, CANCEL' TYPE POP UP
-        for item in recipes:
-            if item.getName() == self.currentRecipe.getName():
-                recipes.pop(recipes.index(item))
-                self.close()
-                saveRecipesJSON()
-                restart()
+        recipeName = self.currentRecipe.getName()
+        choice = qtw.QMessageBox.question(self, 'Delete Recipe Confirmation', 'Actually delete "' + recipeName + '"?', qtw.QMessageBox.Yes | qtw.QMessageBox.No)
+        if choice == qtw.QMessageBox.Yes:
+            for item in recipes:
+                if item.getName() == recipeName:
+                    recipes.pop(recipes.index(item))
+                    self.close()
+                    saveRecipesJSON()
+                    restart()
+        else: pass
 
 class RecipeList(qtw.QListWidget):
         def clicked(self, item):
@@ -157,7 +165,7 @@ class addWindow(qtw.QWidget):
 
         self.setWindowTitle("Add a Recipe")
 
-        self.setLayout(qtw.QVBoxLayout())
+        self.setLayout(qtw.QVBoxLayout())   
 
         self.ingredientsCount = 0
         self.ingredientsNames = []
@@ -170,7 +178,7 @@ class addWindow(qtw.QWidget):
     def makeUI(self):
         container = qtw.QWidget()
         container.setLayout(qtw.QVBoxLayout())
-
+        
         nameContainer = qtw.QWidget()
         nameContainer.setLayout(qtw.QHBoxLayout())
         nameLabel = qtw.QLabel("Name: ")
@@ -228,9 +236,8 @@ class addWindow(qtw.QWidget):
 
     def saveRecipeButtonFunc(self):
         newRecipe = Recipe()
-
+        
         newRecipe.setName(self.nameLE.text())
-
         for ingredientName, ingredientAmount in zip(self.ingredientsNames, self.ingredientsAmounts):
             newRecipe.addIngredient(ingredientName.text(), ingredientAmount.text())
 
@@ -243,7 +250,7 @@ class addWindow(qtw.QWidget):
 
         self.close()
         restart()
-
+        
 
 class MainWindow(qtw.QWidget):
     def __init__(self):
@@ -292,7 +299,7 @@ class MainWindow(qtw.QWidget):
 def restart():
     qtc.QCoreApplication.quit()
     status = qtc.QProcess.startDetached(sys.executable, sys.argv)
-    print(status)
+
 
 def main():
     # INITIALIZE DATA
