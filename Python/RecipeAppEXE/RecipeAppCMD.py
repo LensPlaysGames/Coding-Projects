@@ -138,8 +138,10 @@ class RecipeWindow(qtw.QWidget):
         for key, value in self.currentRecipe.getIngredients().items():
             ingredientsTable.setItem(i, 0, qtw.QTableWidgetItem(str(key)))
             ingredientsTable.setItem(i, 1, qtw.QTableWidgetItem(str(value)))
+            ingredientsTable.setVerticalHeaderItem(i, qtw.QTableWidgetItem(""))
             i += 1
 
+        ingredientsTable.resizeColumnsToContents()
         self.layout().addWidget(ingredientsTable)
 
     def deleteButtonFunc(self):

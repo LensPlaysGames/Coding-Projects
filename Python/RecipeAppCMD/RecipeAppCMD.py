@@ -42,7 +42,7 @@
 
 # Fixed being able to click into and edit cells of the table while in recipe window.
 
-# A comment/notes section for each recipe would be cool.
+# A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system a little bit.
 
 import sys
 import PyQt5.QtWidgets as qtw
