@@ -42,11 +42,12 @@
 
 # Fixed being able to click into and edit cells of the table while in recipe window.
 
-# A comment/notes section for each recipe would be cool.
+# A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system a little bit.
 
 import sys
-import PyQt5.QtWidgets as qtw
 import PyQt5.QtCore as qtc
+import PyQt5.QtWidgets as qtw
+import PyQt5.QtGui as qtgui
 import json
 
 saveFile = "recipes.json"
@@ -105,11 +106,13 @@ class RecipeWindow(qtw.QWidget):
     def __init__(self, recipeName):
         super().__init__()
 
+        self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
         self.setWindowTitle(recipeName + " Ingredients") 
+
         self.setLayout(qtw.QVBoxLayout())
 
-        self.makeUI(recipeName) # LOAD UI LAYOUT & DATA
-        self.show()             # DISPLAY WINDOW ON SCREEN
+        self.makeUI(recipeName)
+        self.show()
 
     def makeUI(self, recipeName):
         self.automaticIngredientsTable(recipeName)
@@ -156,15 +159,12 @@ class RecipeWindow(qtw.QWidget):
                     restart()
         else: pass
 
-class RecipeList(qtw.QListWidget):
-        def clicked(self, item):
-            self.newWindow = RecipeWindow(item.text())
-
-
+# Add-a-Recipe Window: Input form to create a new recipe and add it to the list.
 class addWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
         self.setWindowTitle("Add a Recipe")
 
         self.setLayout(qtw.QVBoxLayout())   
@@ -174,13 +174,14 @@ class addWindow(qtw.QWidget):
         self.ingredientsAmounts = []
         self.makeUI()
 
-        self.show()     # DISPLAY WINDOW ON SCREEN
+        self.show()
 
 
     def makeUI(self):
         container = qtw.QWidget()
         container.setLayout(qtw.QVBoxLayout())
         
+        # NAME INPUT SECTION
         nameContainer = qtw.QWidget()
         nameContainer.setLayout(qtw.QHBoxLayout())
         nameLabel = qtw.QLabel("Name: ")
@@ -211,7 +212,7 @@ class addWindow(qtw.QWidget):
         saveRecipeButton = qtw.QPushButton("Save New Recipe")
         saveRecipeButton.clicked.connect(self.saveRecipeButtonFunc)
 
-
+        # ADD WIDGETS TO CONTAINER (IN TOP-TO-BOTTOM ORDER)
         container.layout().addWidget(nameContainer)
         container.layout().addWidget(self.ingredientsContainer)
         container.layout().addWidget(addIngredientButton)
@@ -224,96 +225,113 @@ class addWindow(qtw.QWidget):
         self.update()
 
     # CONSTRUCTS INGREDIENT FIELD AND ADDS IT TO INGREDIENTS CONTAINER
+    # This function is used by the application user to vary the amount of ingredients in a recipe.
     def addIngredientField(self):
-        ingredientContainer = qtw.QWidget()
-        ingredientContainer.setLayout(qtw.QHBoxLayout())
-        self.ingredientName = qtw.QLineEdit()
-        self.ingredientAmount = qtw.QLineEdit()
-        self.ingredientsNames.append(self.ingredientName)
-        self.ingredientsAmounts.append(self.ingredientAmount)
-        ingredientContainer.layout().addWidget(self.ingredientName)
-        ingredientContainer.layout().addWidget(self.ingredientAmount)
-        self.ingredientsContainer.layout().addWidget(ingredientContainer)
+        ingredientContainer = qtw.QWidget()                                 # Create container for new ingredient input field
+        ingredientContainer.setLayout(qtw.QHBoxLayout())                    # Each ingredient is a 'row' so everything should be in a horizontal layout
+        self.ingredientName = qtw.QLineEdit()                               # Create Line Edit for ingredient name input
+        self.ingredientAmount = qtw.QLineEdit()                             # Create Line Edit for ingredient amount input
+        self.ingredientsNames.append(self.ingredientName)                   # Keep reference to ingredient name by adding to list
+        self.ingredientsAmounts.append(self.ingredientAmount)               # Keep reference to ingredient amount by adding to list
+        ingredientContainer.layout().addWidget(self.ingredientName)         # Add section for name input to ingredient field container
+        ingredientContainer.layout().addWidget(self.ingredientAmount)       # Add section for amount input to ingredient field container
+        self.ingredientsContainer.layout().addWidget(ingredientContainer)   # Add new ingredient field to container of all ingredient fields
         self.ingredientsCount += 1
 
     def saveRecipeButtonFunc(self):
-        newRecipe = Recipe()
+        newRecipe = Recipe()            # Create new recipe object
         
+        # Populate Recipe from User Input
+        # Set recipe name from name input field. Would be smart to check if it's empty, or something.
         newRecipe.setName(self.nameLE.text())
+        # Loop through both lists of ingredient names and amounts at once, adding each ingredient to the recipe
         for ingredientName, ingredientAmount in zip(self.ingredientsNames, self.ingredientsAmounts):
             newRecipe.addIngredient(ingredientName.text(), ingredientAmount.text())
 
-        print("Name: " + newRecipe.getName())
-        print("Ingredients: " + str(newRecipe.getIngredients()))
+        recipes.append(newRecipe)       # Add completed recipe to list of all recipes
+        saveRecipesJSON()               # Save entire list of recipes to JSON file.
 
-        recipes.append(newRecipe)
+        self.close()                    # Close 'Add-a-Recipe' window
 
-        saveRecipesJSON()
-
-        self.close()
+        # Restarts application. Only needed because otherwise the list of recipes doesn't refresh and the new recipe you just created does not show up.
+        # I would use the 'update' function in PyQt5 but I can't figure out how to call it on the main window when clicking a button in the add window.
         restart()
-        
 
+# Custom list widget class for main recipe list
+class RecipeList(qtw.QListWidget):
+        def clicked(self, item):
+            self.newWindow = RecipeWindow(item.text())
+
+# Main Application Window: Displays the list of recipes
 class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
         self.setWindowTitle("Recipe App")
+
         self.setLayout(qtw.QVBoxLayout())
 
         self.makeUI()
-        self.show()     # DISPLAY WINDOW ON SCREEN
+        self.show()
 
     def makeUI(self):
-        # CREATE GRID LAYOUT FOR UI. THIS ONE WIDGET IS ADDED TO THE MAIN LAYOUT.
-        container = qtw.QWidget()
-        container.setLayout(qtw.QGridLayout())
+        # All UI is added to a container, which then gets added to the main layout.
+        container = qtw.QWidget()                                       # Create the container object
+        container.setLayout(qtw.QGridLayout())                          # Select layout style
 
-        title = qtw.QLabel("Recipe App")
-        container.layout().addWidget(title, 0, 0, 1, 3)
+        # In-window Title
+        title = qtw.QLabel("Recipe App")                                # App Title (not needed, but looks too barebones without it)
+        container.layout().addWidget(title, 0, 0, 1, 3)                 # Add title widget to container
 
+        # The list of recipes
+        # I am thinking about making this a tree-view. Each recipe would have a field for a 'category', which would designate which drop-down it resides in in the main recipe list.
         list = RecipeList()
-        container.layout().addWidget(list, 1, 0, 10, 4)
-        list.setAlternatingRowColors(True)
-        list.setDragDropMode(qtw.QAbstractItemView.InternalMove)
-        list.setSelectionMode(qtw.QAbstractItemView.SingleSelection)
-        list.itemClicked.connect(list.clicked)
+        container.layout().addWidget(list, 1, 0, 10, 4)                 # Add list widget to the container
+        list.setAlternatingRowColors(True)                              # Alternating the colors makes it much easier to differentiate between the items in the list,
+        list.setDragDropMode(qtw.QAbstractItemView.InternalMove)        # Drag and Drop your recipes and have them in any order you like!
+        list.setSelectionMode(qtw.QAbstractItemView.SingleSelection)    # Selecting multiple items has no use, as of now, so it's locked to single selection mode.
+        list.itemClicked.connect(list.clicked)                          # Attach 'itemClicked' event to open up a new window with recipe info.
 
+        # Button that saves the list of recipes to JSON (should never be needed, kind of a relic from how it used to work).
         saveButton = qtw.QPushButton("Save")
         saveButton.setToolTip("Saves the current list of recipes")
-        container.layout().addWidget(saveButton, 12, 0, 1, 2)
-        saveButton.clicked.connect(saveRecipesJSON)
+        container.layout().addWidget(saveButton, 12, 0, 1, 2)           # Add save button widget to the container
+        saveButton.clicked.connect(saveRecipesJSON)                     # Attach 'clicked' event to 'save-to-JSON' function.
 
-        addButton = qtw.QPushButton("Add Recipe")
+        addButton = qtw.QPushButton("Add Recipe")                       
         addButton.setToolTip("Opens a window to add an additional recipe")
-        container.layout().addWidget(addButton, 12, 2, 1, 2)
-        addButton.clicked.connect(self.showAddWindow)
+        container.layout().addWidget(addButton, 12, 2, 1, 2)            # Add 'add recipe' button to the container.
+        addButton.clicked.connect(self.showAddWindow)                   # Attach 'clicked' event to show the 'add recipe' window.
 
+        # Populate the visual recipe list from data list of recipes
         for Recipe in recipes:
-            qtw.QListWidgetItem(Recipe.getName(), list)
+            qtw.QListWidgetItem(Recipe.getName(), list)                 # For each recipe in the data list, a list item is created with using the recipe name, and added to the list widget.
 
-        self.layout().addWidget(container)
+        self.layout().addWidget(container)                              # Add entire container to the main layout
 
     def showAddWindow(self, checked):
         self.addWin = addWindow()
         self.addWin.show()
 
+
+# Used to reload the recipe list.
 def restart():
-    qtc.QCoreApplication.quit()
-    status = qtc.QProcess.startDetached(sys.executable, sys.argv)
+    qtc.QCoreApplication.quit()                                         # Close entire application
+    status = qtc.QProcess.startDetached(sys.executable, sys.argv)       # Start the application again just before everything shuts down
 
 
-def main():
+if __name__ == "__main__":
     # INITIALIZE DATA
     LoadRecipesFromJSON()
 
+    # CREATE GUI
     app = qtw.QApplication([])
     app.setStyle(qtw.QStyleFactory.create('fusion'))
     mw = MainWindow()
-    app.exec_()
 
-if __name__ == "__main__":
-    main()
+    # RUN
+    app.exec_()
 
 
 
