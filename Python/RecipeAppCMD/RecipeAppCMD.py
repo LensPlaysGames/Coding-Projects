@@ -42,7 +42,10 @@
 
 # Fixed being able to click into and edit cells of the table while in recipe window.
 
+# NEW FEATURES THAT WOULD BE COOL
 # A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system a little bit.
+# Categories! List of recipes becomes a tree view with collapsible categories of recipes.
+# Button/Option to open JSON file.
 
 import sys
 import PyQt5.QtCore as qtc
