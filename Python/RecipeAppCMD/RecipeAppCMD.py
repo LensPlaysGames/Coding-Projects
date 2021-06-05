@@ -46,6 +46,7 @@
 # A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system a little bit.
 # Categories! List of recipes becomes a tree view with collapsible categories of recipes.
 # Button/Option to open JSON file.
+# Need to save the order of recipes once dragged and dropped, or it's annoying. I don't know how to attach the recipes list to the visual representation of it. It seems like a co-dependence issue.
 
 import sys
 import PyQt5.QtCore as qtc
