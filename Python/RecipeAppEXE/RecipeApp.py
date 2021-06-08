@@ -1,3 +1,4 @@
+
 # So I need a data type, 'recipe' with a name and a dictionary of ingredients and their %'s.
 # I'm going to try to make it a constructable class.
 # IT WORKED! Only took me 20 minutes :/
@@ -42,7 +43,18 @@
 
 # Fixed being able to click into and edit cells of the table while in recipe window.
 
-# A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system a little bit.
+
+# Woot woot! Categories are now implemented. It wasn't awful, but it had some hiccups. Sets are amazing, basically a hashmap for regular data.
+# Also, moved open recipe window to double click, instead of single
+
+
+# NEW FEATURES THAT WOULD BE COOL (* = what i'm working on)
+
+# A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system.
+
+# Button/Option to open JSON file.
+
+# Need to save the order of recipes once dragged and dropped, or it's annoying. I don't know how to attach the recipes list to the visual representation of it. It seems like a co-dependence issue.
 
 import sys
 import PyQt5.QtCore as qtc
@@ -51,12 +63,14 @@ import PyQt5.QtGui as qtgui
 import json
 
 saveFile = "recipes.json"
+categories = set([])
 recipes = []
 
 class Recipe:
     def __init__(self):
         self.name = ""
         self.ingredients = {}
+        self.category = ""
 
     # GETTER AND SETTER METHODS
     def setName(self, name):
@@ -71,11 +85,18 @@ class Recipe:
     def getIngredients(self):
         return self.ingredients
 
+    def setCat(self, category):
+        self.category = category
+
+    def getCat(self):
+        return self.category
+
 # Helper function to turn a recipe into serializable data.
 def recipeToTuple(recipe):
     name = recipe.getName()
     ingredients = recipe.getIngredients()
-    recipeTuple = (name, ingredients)
+    category = recipe.getCat()
+    recipeTuple = (name, ingredients, category)
     return recipeTuple
 
 def saveRecipesJSON():
@@ -87,21 +108,32 @@ def saveRecipesJSON():
     print("SAVED RECIPES TO JSON SUCCESSFULLY")
 
 def LoadRecipesFromJSON():
-    # FROM JSON, LOAD LIST OF 'RECIPES', which is really just a tuple with a string (name) and a dictionary (ingredients).
-    with open(saveFile, 'r') as f:
-        recipeTuples = json.load(f)
+    try:
+        # FROM JSON, LOAD LIST OF 'RECIPES', which is really just a tuple with a string (name) and a dictionary (ingredients).
+        with open(saveFile, 'r') as f:
+            recipeTuples = json.load(f)
 
-    for recipeTuple in recipeTuples:
-        # Seperate the tuple for each recipe into a string and a dictionary.
-        name, ingredients = recipeTuple
-        # Use the deserialized recipe information to create a new recipe, and add it to the list.
-        recipe = Recipe()
-        recipe.setName(name)
-        for key, value in ingredients.items():
-            recipe.addIngredient(key, value)
-        recipes.append(recipe)
-    print("LOADED RECIPES FROM JSON SUCCESSFULLY")
+        for recipeTuple in recipeTuples:
+            # Seperate the tuple for each recipe into a string and a dictionary.
+            name, ingredients, category = recipeTuple
+            # Use the deserialized recipe information to create a new recipe, and add it to the list.
+            recipe = Recipe()
+            recipe.setName(name)
+            for key, value in ingredients.items():
+                recipe.addIngredient(key, value)
+            recipe.setCat(category)
+            recipes.append(recipe)
+        print("LOADED RECIPES FROM JSON SUCCESSFULLY")
+    except FileNotFoundError:
+        print("NO SAVE FILE FOUND")
+        CreateSaveFile()
+        print("NEW SAVE FILE CREATED")
 
+def CreateSaveFile():
+    with open(saveFile, 'w') as f:
+        f.write("{}")
+
+# Recipe Window: Display the data of a given recipe, as well as house the option to delete a recipe.
 class RecipeWindow(qtw.QWidget):
     def __init__(self, recipeName):
         super().__init__()
@@ -149,17 +181,19 @@ class RecipeWindow(qtw.QWidget):
 
     def deleteButtonFunc(self):
         recipeName = self.currentRecipe.getName()
+        # USER CONFIRMATION POP-UP BOX
         choice = qtw.QMessageBox.question(self, 'Delete Recipe Confirmation', 'Actually delete "' + recipeName + '"?', qtw.QMessageBox.Yes | qtw.QMessageBox.No)
-        if choice == qtw.QMessageBox.Yes:
-            for item in recipes:
-                if item.getName() == recipeName:
-                    recipes.pop(recipes.index(item))
-                    self.close()
-                    saveRecipesJSON()
-                    restart()
+        if choice == qtw.QMessageBox.Yes:                                               # USER SAID YES
+            for recipe in recipes:
+                if recipe.getName() == recipeName:
+                    recipes.pop(recipes.index(recipe))                                  # Delete the recipe at the index of the currently displayed recipe
+                    saveRecipesJSON()                                                   # Serialize new recipe data list to JSON
+                    self.close()                                                        # Hide recipe window from user
+                    qtc.QCoreApplication.quit()                                         # Close entire application
+                    status = qtc.QProcess.startDetached(sys.executable, sys.argv)       # Start the application again just before everything shuts down
         else: pass
 
-# Add-a-Recipe Window: Input form to create a new recipe and add it to the list.
+# Add-a-Recipe Window: Input form to create a new recipe and add it to the list in the main window.
 class addWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
@@ -180,6 +214,14 @@ class addWindow(qtw.QWidget):
     def makeUI(self):
         container = qtw.QWidget()
         container.setLayout(qtw.QVBoxLayout())
+
+        # CATEGORY INPUT SECTION
+        catContainer = qtw.QWidget()
+        catContainer.setLayout(qtw.QHBoxLayout())
+        catLabel = qtw.QLabel("Category: ")
+        self.catLE = qtw.QLineEdit()
+        catContainer.layout().addWidget(catLabel)
+        catContainer.layout().addWidget(self.catLE)
         
         # NAME INPUT SECTION
         nameContainer = qtw.QWidget()
@@ -213,6 +255,7 @@ class addWindow(qtw.QWidget):
         saveRecipeButton.clicked.connect(self.saveRecipeButtonFunc)
 
         # ADD WIDGETS TO CONTAINER (IN TOP-TO-BOTTOM ORDER)
+        container.layout().addWidget(catContainer)
         container.layout().addWidget(nameContainer)
         container.layout().addWidget(self.ingredientsContainer)
         container.layout().addWidget(addIngredientButton)
@@ -239,11 +282,15 @@ class addWindow(qtw.QWidget):
         self.ingredientsCount += 1
 
     def saveRecipeButtonFunc(self):
-        newRecipe = Recipe()            # Create new recipe object
+        # Create new recipe object
+        newRecipe = Recipe()
+
+        # Set recipe category from category input field. Would be smart to check if it's empty, or something.
+        newRecipe.setCat(self.catLE.text())
         
-        # Populate Recipe from User Input
         # Set recipe name from name input field. Would be smart to check if it's empty, or something.
         newRecipe.setName(self.nameLE.text())
+
         # Loop through both lists of ingredient names and amounts at once, adding each ingredient to the recipe
         for ingredientName, ingredientAmount in zip(self.ingredientsNames, self.ingredientsAmounts):
             newRecipe.addIngredient(ingredientName.text(), ingredientAmount.text())
@@ -254,15 +301,20 @@ class addWindow(qtw.QWidget):
         self.close()                    # Close 'Add-a-Recipe' window
 
         # Restarts application. Only needed because otherwise the list of recipes doesn't refresh and the new recipe you just created does not show up.
-        # I would use the 'update' function in PyQt5 but I can't figure out how to call it on the main window when clicking a button in the add window.
-        restart()
+        # I would use the 'update' function in PyQt5 but I can't figure out how to call it on the main window when clicking a button in the add window,
+        # unless I add all windows to a list or something to keep global reference to them.
+        qtc.QCoreApplication.quit()                                         # Close entire application
+        status = qtc.QProcess.startDetached(sys.executable, sys.argv)       # Start the application again just before everything shuts down
 
-# Custom list widget class for main recipe list
-class RecipeList(qtw.QListWidget):
+class RecipeTree(qtw.QTreeWidget):
         def clicked(self, item):
-            self.newWindow = RecipeWindow(item.text())
+            name = item.text(0)
+            # A category isn't a recipe, but can still be clicked on. This checks for that.
+            if not name in categories:
+                self.newWindow = RecipeWindow(name)
+            return
 
-# Main Application Window: Displays the list of recipes
+# Main Application Window: Display the list of recipes
 class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
@@ -286,12 +338,11 @@ class MainWindow(qtw.QWidget):
 
         # The list of recipes
         # I am thinking about making this a tree-view. Each recipe would have a field for a 'category', which would designate which drop-down it resides in in the main recipe list.
-        list = RecipeList()
-        container.layout().addWidget(list, 1, 0, 10, 4)                 # Add list widget to the container
-        list.setAlternatingRowColors(True)                              # Alternating the colors makes it much easier to differentiate between the items in the list,
-        list.setDragDropMode(qtw.QAbstractItemView.InternalMove)        # Drag and Drop your recipes and have them in any order you like!
-        list.setSelectionMode(qtw.QAbstractItemView.SingleSelection)    # Selecting multiple items has no use, as of now, so it's locked to single selection mode.
-        list.itemClicked.connect(list.clicked)                          # Attach 'itemClicked' event to open up a new window with recipe info.
+
+        tree = RecipeTree()
+        tree.setHeaderHidden(True)
+        container.layout().addWidget(tree, 1, 0, 10, 4)
+        tree.itemDoubleClicked.connect(tree.clicked)                    # Call custom clicked function on double click. Opens recipe window to display ingredients & more.
 
         # Button that saves the list of recipes to JSON (should never be needed, kind of a relic from how it used to work).
         saveButton = qtw.QPushButton("Save")
@@ -304,21 +355,26 @@ class MainWindow(qtw.QWidget):
         container.layout().addWidget(addButton, 12, 2, 1, 2)            # Add 'add recipe' button to the container.
         addButton.clicked.connect(self.showAddWindow)                   # Attach 'clicked' event to show the 'add recipe' window.
 
+        # Populate the list of categories to place recipes in
+        for Recipe in recipes:
+            category = Recipe.getCat()
+            categories.add(category)
+
+        for category in categories:
+            catItem = qtw.QTreeWidgetItem(tree)
+            catItem.setText(0, category)
         # Populate the visual recipe list from data list of recipes
         for Recipe in recipes:
-            qtw.QListWidgetItem(Recipe.getName(), list)                 # For each recipe in the data list, a list item is created with using the recipe name, and added to the list widget.
+            category = tree.findItems(Recipe.getCat(), qtc.Qt.MatchExactly, 0)
+            category = category[0]
+            tmp_item = qtw.QTreeWidgetItem(category)
+            tmp_item.setText(0, Recipe.getName())
 
         self.layout().addWidget(container)                              # Add entire container to the main layout
 
     def showAddWindow(self, checked):
         self.addWin = addWindow()
         self.addWin.show()
-
-
-# Used to reload the recipe list.
-def restart():
-    qtc.QCoreApplication.quit()                                         # Close entire application
-    status = qtc.QProcess.startDetached(sys.executable, sys.argv)       # Start the application again just before everything shuts down
 
 
 if __name__ == "__main__":
@@ -332,33 +388,3 @@ if __name__ == "__main__":
 
     # RUN
     app.exec_()
-
-
-
-
-## This is how "IT WORKED!"
-#StandardBP = Recipe()
-#StandardBP.setName("Black Powder")
-#StandardBP.addIngredient("KNO3", 75)
-#StandardBP.addIngredient("Charcoal", 15)
-#StandardBP.addIngredient("Sulfur", 10)
-#print(StandardBP.getIngredients())
-#recipes.append(StandardBP)
-#print()
-#MillerBangor165 = Recipe()
-#MillerBangor165.setName("Miller - Bangor (16.5%)")
-#MillerBangor165.addIngredient("KNO3", 67)
-#MillerBangor165.addIngredient("Al (pyro)", 16.5)
-#MillerBangor165.addIngredient("Sulfur", 16.5)
-#print(MillerBangor165.getIngredients())
-#recipes.append(MillerBangor165)
-#print()
-#Comp604 = Recipe()
-#Comp604.setName("Composition 604")
-#Comp604.addIngredient("KNO3", 54)
-#Comp604.addIngredient("Al (pyro)", 40)
-#Comp604.addIngredient("Sulfur", 5)
-#Comp604.addIngredient("Boric Acid", 1)
-#print(Comp604.getIngredients())
-#recipes.append(Comp604)
-#print()

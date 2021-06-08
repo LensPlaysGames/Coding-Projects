@@ -1,0 +1,48 @@
+[
+  [
+    "Miller - Bangor 16.5%",
+    {
+      "KNO3": "67%",
+      "Al": "16.5%",
+      "Sulfur": "16.5%"
+    },
+    "Flash Powder"
+  ],
+  [
+    "Millor Bangor 30%",
+    {
+      "KNO3": "60%",
+      "Al": "30%",
+      "Sulfur": "10%"
+    },
+    "Flash Powder"
+  ],
+  [
+    "Black Powder, Standard",
+    {
+      "KNO3": "75%",
+      "Charcoal": "15%",
+      "Sulfur": "10%"
+    },
+    "General"
+  ],
+  [
+    "French War Powder",
+    {
+      "KNO3": "75%",
+      "Charcoal": "12.5%",
+      "Sulfur": "12.5%"
+    },
+    "General"
+  ],
+  [
+    "Tiger Tail",
+    {
+      "KNO3": "44%",
+      "Charcoal": "44%",
+      "Sulfur": "6%",
+      "Dextrin": "6%"
+    },
+    "Stars"
+  ]
+]

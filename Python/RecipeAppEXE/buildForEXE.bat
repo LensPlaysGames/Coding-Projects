@@ -1,1 +1,1 @@
-pyinstaller --onefile RecipeAppCMD.py
+pyinstaller --noconsole --onefile RecipeApp.py
