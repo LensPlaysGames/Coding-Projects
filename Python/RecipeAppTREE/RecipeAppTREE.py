@@ -50,11 +50,13 @@
 
 # NEW FEATURES THAT WOULD BE COOL (* = what i'm working on)
 
+# Change category input (currently just a LineEdit) to an editable combo box with the existing categories in the dropdown menu. Avoids annoying issues arising from user typos.
+
+# Option to change default sort order of recipe list (ascending, descending)
+
 # A comment/notes section for each recipe would be really cool. Basically just a textedit widget in the add recipe area, but also have to integrate into the save/load system.
 
 # Button/Option to open JSON file.
-
-# Need to save the order of recipes once dragged and dropped, or it's annoying. I don't know how to attach the recipes list to the visual representation of it. It seems like a co-dependence issue.
 
 import sys
 import PyQt5.QtCore as qtc
@@ -319,8 +321,9 @@ class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
-        self.setWindowTitle("Recipe App")
+        self.setGeometry(200, 200, 420, 300)                            # Open in the top left of the screen, big enough to see what's going on.
+        self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))            # Set the little picture at the top
+        self.setWindowTitle("Recipe App")                               # Set the title of the window
 
         self.setLayout(qtw.QVBoxLayout())
 
@@ -360,15 +363,19 @@ class MainWindow(qtw.QWidget):
             category = Recipe.getCat()
             categories.add(category)
 
+        # Create category items from list of categories
         for category in categories:
             catItem = qtw.QTreeWidgetItem(tree)
             catItem.setText(0, category)
+
         # Populate the visual recipe list from data list of recipes
         for Recipe in recipes:
             category = tree.findItems(Recipe.getCat(), qtc.Qt.MatchExactly, 0)
             category = category[0]
             tmp_item = qtw.QTreeWidgetItem(category)
             tmp_item.setText(0, Recipe.getName())
+
+        tree.sortItems(0, qtc.Qt.AscendingOrder)                        # Sort items in ascending alphabetical order
 
         self.layout().addWidget(container)                              # Add entire container to the main layout
 
