@@ -1,0 +1,62 @@
+# So I need a data type, 'recipe' with a name and a dictionary of ingredients and their %'s.
+# I'm going to try to make it a constructable class.
+# IT WORKED! Only took me 20 minutes :/
+
+# After the data type is constructed, I need a way to modify it. I'm going to TRY and use PyQt5
+# The plan is to have a list of recipes that are displayed in a 'list' widget in QT, that can each be clicked on to open a dialog box with a table containing that recipes ingredients.
+# I did it! It took way too fucking long, but it worked. I can now see the hard-coded recipes appear in the app, as well as click on them to view their ingredients and ratios. This bit took a good two hours.
+
+# Next would be either the ability to save and load the list of recipes, or the ability to add new recipes and remove them. I think saving and loading is harder, so I'll work on that first.
+# If I can't work it out, I'll move on to just making another window with inputs for a new recipe.
+# So I can't just serialize the 'recipe' class. Meaning I have to create 'transition' methods that turn a recipe into a dictionary or list or something, then another to load from the file and do the reverse.
+# This is awful.
+# 20 minutes later, I've done it, sort of.
+# One recipe can be saved and loaded!
+# Now to extend that to a list of recipes...
+# Done! I can now save a list of recipes. Took me like 10 minutes.
+# Time to work on loading!
+# I did it! Took me like 30 minutes. Total time spent coding at this point: ~2.5 hours.
+
+# Next up, the add window. Just have to make a new widget class called 'addWindow' or something, and figure out how to have multiple ingredients and stuff. We'll get there...
+# I've made a lot of progress. There is an add recipe button, a window that pops up with fields to enter the name of the recipe as well as an ingredient and how much to use.
+# The problem is with my method of adding more ingredients. I thought it would be nice, UX-wise, to just click a button and add another ingredient. 
+# This turned out to be really difficult, or at least I made it that way. I was able to do it, but everytime an ingredient was added all the fields went blank...
+# So, now I'm going to just pop up a window that asks how many ingredients it has, then move on to adding in all the data. 
+# It's not ideal but it's what I got.
+
+# I LIED! I can totally use the add ingredient button. I was just being a dummy and forgot about self.update(), which is exactly what I needed. Removed 30 lines of code and replaced it with two :).
+
+# So now I can add ingredients without everything disappearing, but I need to figure out how to loop over the lineedits and arrange them into ingredients and amounts in a dictionary.
+# This dictionary can then be assembled into the final recipe output, which can be added to the list of recipes.
+
+# I did it! 
+# I took a different approach than above, however; 
+# the QLineEdit objects are added to a list as they are made, then that list is looped over to extract the text and those strings are converted into an ingredient dictionary.
+# This took about 30 minutes to figure out/code.
+# I also added a delete button when looking at a recipe. It doesn't close the menu, and it doesn't update the main menu, but closing and opening the program works. I'll fix this next.
+# I'm so happy! I can now create, delete, store, load, and visualize pyrotechnic compositions, with my own software!
+
+# I've sort of fixed the not updating thing, it just restarts instead of doing anything fancy.
+
+# Added delete confirmation when deleting a recipe. Also added close button to recipe window. Fixed not saving new recipe name. Total time programming up to this point: ~5 hours.
+
+# Fixed being able to click into and edit cells of the table while in recipe window.
+
+
+# Woot woot! Categories are now implemented. It wasn't awful, but it had some hiccups. Sets are amazing, basically a hashmap for regular data.
+# Also, moved open recipe window to double click, instead of single
+
+# I've done it! A notes section is now fully integrated into the program. Woot woot!
+
+# When creating a new recipe, the categories section now has a drop down with all your previously used categories! 
+# Very useful feature that saves a lot of time and effort when accidentally mistyping a category and having to remake the whole recipe.
+
+# Moved the save button to a menuBar! Only required minimal refactoring.
+
+# Refactored the add-a-recipe window slightly, allowing to remove ingredients as well as add them, now. 
+# Also added a cancel button, in case the user doesn't want to add a recipe anymore.
+
+# Created a Menu Bar in the main window, which houses the save feature (removed the ugly, useless button), the new view JSON feature (opens JSON in text editor), as well as a quit button.
+
+# Reformatted the JSON syntax. Now, the category comes first, then the name, followed by ingredients, then description. 
+# That at least seems somewhat logical, compared to before (name, ingredients, category, description). I know it doesn't matter but it was bothering me.

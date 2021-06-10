@@ -1,4 +1,3 @@
-
 # So I need a data type, 'recipe' with a name and a dictionary of ingredients and their %'s.
 # I'm going to try to make it a constructable class.
 # IT WORKED! Only took me 20 minutes :/

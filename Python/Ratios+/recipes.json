@@ -1,0 +1,216 @@
+[
+  [
+    "Flash Powder",
+    "Composition 604",
+    {
+      "KNO3": "54%",
+      "Al": "40%",
+      "Sulfur": "5%",
+      "Boric Acid": "1%"
+    },
+    "Composition 604 (7578895) is a wonderful, powerful pyrotechnic flash powder created by Gary Chen, Mark Motyka, and Jay C. Poret for the US Army as a perchlorate-free flashbang replacement for use in M115A2 and M116A1 hand grenade simulators during training. One gram of the stuff is enough to take fingers. The best part about this composition is it's simplicity, flexibility, as well as safety. The ingredients listed are just one variation. Oxidizer can be any of KNO3, Sr(NO3)2, or basic copper nitrate, ranging from 45-60%. Metallic fuel can be any powder of Al, Mg, Mg/Al, Si, and Zr, ranging from 35-45%. Non-mettalic fuel is sulfur, ranging from 0-15%. pH buffer is boric acid, ranging from 0.5-1.5%. This buffer prevents forming amides between the nitrates and metals (effectively reducing agents in this scenario), which is exothermic and could ignite the mixture. A ballistic accelerant may be used to improve the brissance of the material, which can be any of nitrocellulose, black powder, or a propellant, ranging from 0-10%. 0-5% diatomaceous earth (fine SiO2) can be used as an anti-caking/free-flow agent."
+  ],
+  [
+    "Black Powder",
+    "English War Powder",
+    {
+      "KNO3": "75%",
+      "Charcoal": "15%",
+      "Sulfur": "10%"
+    },
+    "Used in 1879 by the British military. The most commonly repeated ratio for making black powder, as it works with most types of charcoal, and is easy to remember."
+  ],
+  [
+    "Black Powder",
+    "French War Powder",
+    {
+      "KNO3": "75%",
+      "Charcoal": "12.5%",
+      "Sulfur": "12.5%"
+    },
+    "Used by the Frenchies in 1879 (oui, oui)."
+  ],
+  [
+    "Black Powder",
+    "British Congreve Rocket Fuel",
+    {
+      "KNO3": "62.4%",
+      "Charcoal": "23.2%",
+      "Sulfur": "14.4%"
+    },
+    "This was used in larger projectiles/missiles by the British military."
+  ],
+  [
+    "Black Powder",
+    "British Mark VII Gunpowder",
+    {
+      "KNO3": "65%",
+      "Charcoal": "20%",
+      "Sulfur": "15%"
+    },
+    "Used by the British military to make bullets go fast."
+  ],
+  [
+    "Black Powder",
+    "Blasting Powder",
+    {
+      "KNO3": "70%",
+      "Charcoal": "14%",
+      "Sulfur": "16%"
+    },
+    "Used for blasting apart rocks and shit. Take that, dynamite!"
+  ],
+  [
+    "Black Powder",
+    "Sulfur-Free Powder",
+    {
+      "KNO3": "70.5%",
+      "Charcoal": "29.5%"
+    },
+    "Contains no sulfur, which means it is harder to ignite and doesn't burn as fast. Used when sulfur could react with other materials around the powder, like when using it with a chlorate/perchlorate bullet primer, for example."
+  ],
+  [
+    "Flash Powder",
+    "Miller - Bangor Powder #1",
+    {
+      "KNO3": "67%",
+      "Al": "16.5%",
+      "Sulfur": "16.5%"
+    },
+    "Very adequate flash! I like this version over the other one because they perform basically the same, but this one uses less Al. Doesn't normally include boric acid, but I do to prevent exothermic formation of amides by reaction of nitrate oxidizer and Al powder."
+  ],
+  [
+    "Flash Powder",
+    "Miller - Bangor Powder #2",
+    {
+      "KNO3": "60%",
+      "Al": "30%",
+      "Sulfur": "10%"
+    },
+    "This one acts identically to the MBP #1, but uses more Al, so I don't use this mix often. I assume with a coarser Al this might be a better mix."
+  ],
+  [
+    "Flash Powder",
+    "Nitrate Flash",
+    {
+      "KNO3": "50%",
+      "Al": "30%",
+      "Sulfur": "20%"
+    },
+    "'Standard' flash ratio. Not as energetic as some other compositions, but still something to be respected. Ignites easier due to increased sulfur content. I use this strictly as a 'flash' demonstration, as in just burning a gram or so out in the open. For activities that require more brissance, this is not the composition to use. I've seen some people swap the ratios for the Al and Sulfur, but in the end it works both ways. Again, INCLUDE +1% BORIC ACID, it's just not shared with this recipe for some reason :(."
+  ],
+  [
+    "Flash Powder",
+    "Permanganate Flash",
+    {
+      "KMnO4": "50%",
+      "Al": "30%",
+      "Sulfur": "20%"
+    },
+    "Not inherently dangerous, just unpredictable. Stuff that sets it off one moment won't the next. Don't use this at all in pyrotechnics, and if you do, expect rapid onset finger loss. Not to mention, KMnO4 gets EVERYWHERE and stains EVERYTHING. It sucks to work with. Don't make this, and if you do, keep quantity very small (1g or less). Plus, KMnO4 has so many other uses, why waste it on dangerous, unpredictable flash?"
+  ],
+  [
+    "Flash Powder",
+    "Perchlorate Flash",
+    {
+      "KClO4": "70%",
+      "Al": "30%"
+    },
+    "Industry standard for flash powder. Simple but effective."
+  ],
+  [
+    "Black Powder",
+    "PGI Lift Powder",
+    {
+      "KNO3": "74%",
+      "Charcoal": "14%",
+      "Sulfur": "12%"
+    },
+    "Lift Powder Formulation from the Pyrotechnics Guild International. The industry standard for launching shells and mortars."
+  ],
+  [
+    "Thermite",
+    "Red Iron Oxide",
+    {
+      "Iron(III) Oxide": "75%",
+      "Al": "25%"
+    },
+    "The classic thermite. This thermite burns HOT, and with a ton of sparks, leaving behind a molten blob of slag and iron that stays hot for a LONG time. Exact ratio is 296:100 oxide to Al, but 3:1 is just fine and easier to measure."
+  ],
+  [
+    "Thermite",
+    "Manganese Dioxide",
+    {
+      "MnO2": "70.5%",
+      "Al": "29.5%"
+    },
+    "MnO2 stains EVERYTHING. If extracting from batteries, be sure to wash out the KOH electrolyte."
+  ],
+  [
+    "Thermite",
+    "Black Copper Oxide",
+    {
+      "Copper(II) Oxide": "81.5%",
+      "Al": "18.5%"
+    },
+    "Copper oxide thermites burn faster but release less energy. Should be treated like flash."
+  ],
+  [
+    "Thermite",
+    "Red Copper Oxide",
+    {
+      "Copper(I) Oxide": "89%",
+      "Al": "11%"
+    },
+    "Copper oxide thermites create less energy but burn much, much faster. Treat this composition as flash, safety-wise. Known to detonate and send millions of blobs of molten copper in all directions."
+  ],
+  [
+    "Thermite",
+    "Thermate",
+    {
+      "Thermite": "68.7%",
+      "Ba(NO3)2": "29%",
+      "Sulfur": "2%",
+      "Dextrin": "0.3%"
+    },
+    "Like thermite's older brother. Can detonate in large quantities, especially if confined. Clear the area before burning."
+  ],
+  [
+    "Fuse",
+    "bAl-Match",
+    {
+      "Black Powder": "70%",
+      "Al": "30%",
+      "Dextrin": "+5%"
+    },
+    "bAl-Match, aka black powder aluminium match, is my own formulation of black match. The addition of Al creates a higher temperature flame, as well as a more consistent burn rate (no more spitting). 7 meters of cotton string is prepared, as well as 15g fuse composition. The composition is wet with 75:25 water to isopropanol until a thick slurry texture is reached (like a thick milkshake). The string is wet until fully saturated. The string is then put into the slurry and mixed around for a few minutes, ensuring an even coat and a good soak. The string is then removed from the slurry and set out to dry in the sun (DO NOT HEAT). After a day or three, your fuse is ready! Makes a killer quick-match when enclosed in a paper tube, although rolling Al foil around it also does the job. NC lacquer mixed with black powder can be used to seal the fuse."
+  ],
+  [
+    "Fuse",
+    "Black Match",
+    {
+      "Black Powder": "100%",
+      "Dextrin": "+5%"
+    },
+    "Black match is fuse made from black powder. It is made by wetting black powder into a slurry, then soaking cotton string in it. The string is then taken out, dried, and ready to be used! Personally, I've had nothing but failure using black match. It goes out on it's own (sometimes), it spits sparks and lights itself (making it inconsistent), and goes out when wrapped in paper, Al foil, hot glue, wood glue, and anything else I could find. Not the fuse for me, personally. Without dextrin it is a crumbly mess that falls apart and could never work. Dextrin pushes it into a 'usable' area, but only if nothing else was available."
+  ],
+  [
+    "Fuse",
+    "Sugar Fuse",
+    {
+      "KNO3": "65%",
+      "Sugar": "35%"
+    },
+    "I learned about this from Grant Thompson years ago, and finally thought I could make it and use it! It's definitely useful, and I've made many a successful firecracker with it. However, it is not reliable (goes out on its own), as well as having the issue of what I call 'creeping'. It doesn't burn evenly, it burns a section really fast, then smolders for a while, then burns a whole section, then smolders, making timing anything with this fuse impossible. I've had three inch sections go nearly instantly, and I've had two inch fuses that go out e very few millimeters. Definitely important to keep dry, or it just won't work at all. Works in a pinch, and much better than regular black match, but definitely leaves things to be desired in the fuse department. Made by dissolving composition in equal weight boiling water, then boiling cotton string in the water until the composition crystalizes onto the string. Once the pan is getting dry, remove from heat and lay string out on a baking sheet. Bake at 150 degrees C for 20 minutes to fully dry the fuse. It is now ready to ignite!"
+  ],
+  [
+    "Fuse",
+    "Silicone Microfuse",
+    {
+      "KMnO4": "71.5%",
+      "Sulfur": "14.25%",
+      "Silicone Caulking": "14.25%"
+    },
+    "Heard about this from ElementalMaker over on YT. Mix together and form into a flat brick that can be cut into strips later (much like stars). Burns hot enough to ignite thermites. Flexible. Can be wrapped in electrical tape to increase durability and lifespan."
+  ]
+]
