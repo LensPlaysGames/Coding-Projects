@@ -1,9 +1,13 @@
 # NEW FEATURES THAT WOULD BE COOL (* = what i'm working on)
 
+# In the add-a-recipe window, an up/down button on the left of each ingredient would be nice to be able to re-arrange them, 
+# as well as move the 'remove ingredient' function to an 'X' button on the right side of each ingredient, instead of just removing the last ingredient in the list.
+
 # Options Window
     # Option to change default sort order of recipe list (ascending, descending).
 
-# Error handling for not being able to open a recipe with the same name as the a category
+# Error handling for not being able to open a recipe with the same name as a category. 
+# Fairly simple, just have to change the name and append ' Recipe' or something to the end of the name if it matches a category exactly.
 
 # Clone and Edit Recipe. From an existing recipe, create a new one, automatically populating the fields with the cloned recipes ingredients. This makes it easy to make variations and such.
 
