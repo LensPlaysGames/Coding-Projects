@@ -13,6 +13,8 @@
 
 # Edit Recipe. I'm thinking just re-open the add a recipe window and populate it programatically, but I'm not certain of how to go about this exactly.
 
+# In the recipe window (where a recipe's ingredients and notes are dipslayed), the table doesn't resize to contents correctly, and I can't figure it out right now.
+
 
 import sys
 import os
