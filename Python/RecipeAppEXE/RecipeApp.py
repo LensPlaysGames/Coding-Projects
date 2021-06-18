@@ -1,13 +1,19 @@
 # NEW FEATURES THAT WOULD BE COOL (* = what i'm working on)
 
+# In the add-a-recipe window, an up/down button on the left of each ingredient would be nice to be able to re-arrange them, 
+# as well as move the 'remove ingredient' function to an 'X' button on the right side of each ingredient, instead of just removing the last ingredient in the list.
+
 # Options Window
     # Option to change default sort order of recipe list (ascending, descending).
 
-# Error handling for not being able to open a recipe with the same name as the a category
+# Error handling for not being able to open a recipe with the same name as a category. 
+# Fairly simple, just have to change the name and append ' Recipe' or something to the end of the name if it matches a category exactly.
 
 # Clone and Edit Recipe. From an existing recipe, create a new one, automatically populating the fields with the cloned recipes ingredients. This makes it easy to make variations and such.
 
 # Edit Recipe. I'm thinking just re-open the add a recipe window and populate it programatically, but I'm not certain of how to go about this exactly.
+
+# In the recipe window (where a recipe's ingredients and notes are dipslayed), the table doesn't resize to contents correctly, and I can't figure it out right now.
 
 
 import sys
@@ -17,6 +23,9 @@ import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
 import PyQt5.QtGui as qtgui
 import json
+
+screenSizeX = 1920;
+screenSizeY = 1080;
 
 saveFile = "recipes.json"
 categories = set([])
@@ -121,7 +130,11 @@ def CreateSaveFile():
 class RecipeWindow(qtw.QWidget):
     def __init__(self, recipeName):
         super().__init__()
-
+        
+        distanceFromScreenEdgeX = int(screenSizeX * 0.078125)
+        windowSizeX = int(screenSizeX * 0.46667)
+        windowSizeY = int(screenSizeX * 0.1875)
+        self.setGeometry(distanceFromScreenEdgeX, distanceFromScreenEdgeX * 2, windowSizeX, windowSizeY)
         self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
         self.setWindowTitle(recipeName + " Ingredients") 
 
@@ -131,6 +144,13 @@ class RecipeWindow(qtw.QWidget):
         self.show()
 
     def makeUI(self, recipeName):
+        titleFont = qtgui.QFont()
+        titleFont.setPointSize(15)
+        recipeTitleWidget = qtw.QLabel(recipeName)
+        recipeTitleWidget.setAlignment(qtc.Qt.AlignCenter)
+        recipeTitleWidget.setFont(titleFont)
+        self.layout().addWidget(recipeTitleWidget)
+
         # Create ingredients table from data programatically.
         self.automaticIngredientsTable(recipeName)
 
@@ -214,7 +234,13 @@ class RecipeWindow(qtw.QWidget):
 class addWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
-
+        
+        self.distanceFromScreenEdgeX = int(screenSizeX * 0.33)
+        self.distanceFromScreenEdgeY = int(screenSizeX * 0.1)
+        self.windowSizeX = int(screenSizeX * 0.18)
+        self.windowSizeY = int(screenSizeX * 0.27)
+        print("Window Size Set to (" + str(self.windowSizeX) + ", " + str(self.windowSizeY) + ")")
+        self.setGeometry(self.distanceFromScreenEdgeX, self.distanceFromScreenEdgeY, self.windowSizeX, self.windowSizeY)
         self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))
         self.setWindowTitle("Add a Recipe")
 
@@ -228,7 +254,6 @@ class addWindow(qtw.QWidget):
         self.makeUI()
 
         self.show()
-
 
     def makeUI(self):
         container = qtw.QWidget()
@@ -258,6 +283,8 @@ class addWindow(qtw.QWidget):
 
         # NOTES INPUT SECTION
         notesContainer = qtw.QWidget()
+        notesContainer.setMinimumHeight(int(screenSizeX / 10))
+        notesContainer.setMaximumHeight(int(screenSizeX / 10))
         notesContainer.setLayout(qtw.QVBoxLayout())
         notesLabel = qtw.QLabel("Notes: ")
         self.notesTE = qtw.QPlainTextEdit()
@@ -347,6 +374,10 @@ class addWindow(qtw.QWidget):
 
         # Update total count of ingredients
         self.setIngredientsCount(self.ingredientsCount - 1)
+        
+        # Set window height based on # of ingredients
+        self.setWindowHeight(self.size().height() - 35)
+        
 
     def addIngredientButtonFunc(self):
         self.addIngredientField()
@@ -357,15 +388,20 @@ class addWindow(qtw.QWidget):
     def addIngredientField(self):
         ingredientContainer = qtw.QWidget()                                 # Create container for new ingredient input field
         ingredientContainer.setLayout(qtw.QHBoxLayout())                    # Each ingredient is a 'row' so everything should be in a horizontal layout
-        self.ingredientContainers.append(ingredientContainer)              # Keep reference to ingredient container by adding to list
+        self.ingredientContainers.append(ingredientContainer)               # Keep reference to ingredient container by adding to list
         self.ingredientName = qtw.QLineEdit()                               # Create Line Edit for ingredient name input
+        self.ingredientName.setMinimumHeight(20)
+        self.ingredientName.setMaximumHeight(20)
         self.ingredientAmount = qtw.QLineEdit()                             # Create Line Edit for ingredient amount input
+        self.ingredientAmount.setMinimumHeight(20)
+        self.ingredientAmount.setMaximumHeight(20)
         self.ingredientsNames.append(self.ingredientName)                   # Keep reference to ingredient name by adding to list
         self.ingredientsAmounts.append(self.ingredientAmount)               # Keep reference to ingredient amount by adding to list
         ingredientContainer.layout().addWidget(self.ingredientName)         # Add section for name input to ingredient field container
         ingredientContainer.layout().addWidget(self.ingredientAmount)       # Add section for amount input to ingredient field container
         self.ingredientsContainer.layout().addWidget(ingredientContainer)   # Add new ingredient field to container of all ingredient fields
         self.setIngredientsCount(self.ingredientsCount + 1)                 # Update total count of ingredients
+        self.setWindowHeight(self.size().height() + 35)
 
     def saveRecipeButtonFunc(self):
         # Create new recipe object
@@ -389,18 +425,26 @@ class addWindow(qtw.QWidget):
 
         self.close()                    # Close 'Add-a-Recipe' window
 
-        # Restarts application. Only needed because otherwise the list of recipes doesn't refresh and the new recipe you just created does not show up.
-        # I would use the 'update' function in PyQt5 but I can't figure out how to call it on the main window when clicking a button in the add window,
-        # unless I add all windows to a list or something to keep global reference to them.
-        qtc.QCoreApplication.quit()                                         # Close entire application
-        status = qtc.QProcess.startDetached(sys.executable, sys.argv)       # Start the application again just before everything shuts down
+        # Close entire application
+        qtc.QCoreApplication.quit()
+        # Start the application again just before everything shuts down
+        status = qtc.QProcess.startDetached(sys.executable, sys.argv)
+
+    def setWindowHeight(self, height):
+        self.setMinimumHeight(height)
+        self.setMaximumHeight(height)
 
 # Main Application Window: Display the list of recipes
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setGeometry(200, 200, 420, 300)                            # Open in the top left of the screen, big enough to see what's going on.
+        # Set window to open 10% away from the corner in the top left, and set it's size relative to the screen size.
+        distanceFromScreenEdges = int(screenSizeX * 0.1)
+        windowSizeX = int(screenSizeX * 0.21875)
+        windowSizeY = int(screenSizeX * 0.15625)
+        self.setGeometry(distanceFromScreenEdges, distanceFromScreenEdges, windowSizeX, windowSizeY)
+
         self.setWindowIcon(qtgui.QIcon("RecipeAppIcon.png"))            # Set the little picture at the top
         self.setWindowTitle("Recipe App")                               # Set the title of the window
 
@@ -501,6 +545,9 @@ if __name__ == "__main__":
     app = qtw.QApplication([])
     app.setStyle(qtw.QStyleFactory.create('fusion'))
     mw = MainWindow()
+
+    screenSizeX = app.primaryScreen().size().width()
+    screenSizeY = app.primaryScreen().size().height()
 
     # RUN
     app.exec_()
