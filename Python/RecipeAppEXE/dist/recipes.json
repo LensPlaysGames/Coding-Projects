@@ -363,5 +363,86 @@
       "Sulfur": "2%"
     },
     "Designed by me. Inspired by Thermate-TH3, which is used by the US military to destroy weapons and tanks and shit. It's like a slow flash powder, but it burns HOT. Manganese dioxide extracted from lantern batteries. Stability unknown at this date."
+  ],
+  [
+    "Fountains/Gerbs",
+    "Fountain #10",
+    {
+      "KNO3": "56.25%",
+      "Charcoal": "16.25%",
+      "Sulfur": "15%",
+      "Al": "12.5%"
+    },
+    "My first fountain mixture ever made. I packed it into tiny 6mm ID paper tubes and lit one end. Very fun mixture, and tame enough for the whole family to enjoy. In larger fountains with clay nozzles, the sparks are very plentiful and have reached heights of 15-30ft. Bright-white, torch-like flame with sparks emitted."
+  ],
+  [
+    "Fountains/Gerbs",
+    "Fountain #4",
+    {
+      "Meal Powder": "70%",
+      "Al": "26%",
+      "Charcoal, hardwood": "4%"
+    },
+    "Very bright white, large, torch-like flame with a shower of sparks emitted from the end. I love the simplicity and variability of this mixture, as the metal fuel can be replaced with any of Al, Magnalium (which is blindingly bright), Ti, or Fe."
+  ],
+  [
+    "Fountains/Gerbs",
+    "Lancaster Gold Fountain #1",
+    {
+      "KNO3": "72%",
+      "Charcoal, 40-100 mesh": "16%",
+      "Charcoal, 28 mesh": "4%",
+      "Sulfur": "8%"
+    },
+    "Recommended for use in tubes with ID ranging from 18 to 75 millimeters. Charcoal mesh doesn't have to be exact, just use fine stuff and coarse stuff and you'll be okay. I like non-metallic mixtures just for the sake of simplicity. Also, the orange produced by charcoal sparks is beautiful in the dark."
+  ],
+  [
+    "Fountains/Gerbs",
+    "Lancaster Rain #1",
+    {
+      "Meal Powder": "75%",
+      "Charcoal, 40-100 mesh": "25%"
+    },
+    "Another simple non-metallic mixture. Recommended for use in tubes with ID ranging from 6 to 9 millimeters, and length ranging from 7.5 to 12.5 cm."
+  ],
+  [
+    "Black Powder",
+    "Senko Hanabi (Sulfur-Based)",
+    {
+      "KNO3": "60%",
+      "Charcoal": "20%",
+      "Sulfur": "20%"
+    },
+    "Normally senko-hanabi fireworks (the japanese sparkler, effectively) are made with realgar. Realgar is beautiful in that it makes big sparks, but it is also real poisonous, so alternatives have been found."
+  ],
+  [
+    "Delay",
+    "Dark Fuse #2",
+    {
+      "KNO3": "56%",
+      "Sulfur": "34%",
+      "Charcoal": "10%"
+    },
+    "I believe this to be a delay mix, although there isn't much documentation online. Developed by Shimizu."
+  ],
+  [
+    "Fuse",
+    "Zinc Match",
+    {
+      "Zn": "63%",
+      "KNO3": "32%",
+      "Sulfur": "5%"
+    },
+    "Found on Alan Yates' website, \"Alan's Lab; me and my geeky hobbies\". Apparently can be mixed with '3 parts' dextrin and granulated for a flash/report mix, or cut into stars."
+  ],
+  [
+    "Black Powder",
+    "7:3:1",
+    {
+      "KNO3": "63.64%",
+      "Charcoal, airfloat": "27.27%",
+      "Sulfur": "9.09%"
+    },
+    "From Alan Yates' website, \"Alan's Lab\". His notes are, \"Quite fast, even with pretty average charcoals; 7-8mm/s.\""
   ]
 ]

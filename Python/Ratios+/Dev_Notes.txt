@@ -60,3 +60,6 @@
 
 # Reformatted the JSON syntax. Now, the category comes first, then the name, followed by ingredients, then description. 
 # That at least seems somewhat logical, compared to before (name, ingredients, category, description). I know it doesn't matter but it was bothering me.
+
+
+# I think it would be cool to have a drop-down next to the amount label in the add ingredient window that houses the options for what kind of amounts you would like to input (open-response or percentage) and have it pop up with a ticker-type input for percentages.
